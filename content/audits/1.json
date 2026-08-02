@@ -1,0 +1,1061 @@
+{
+  "number": 1,
+  "sceneId": "fixture-001",
+  "theme": "fixture",
+  "predicates": [
+    {
+      "attr": "kind",
+      "value": "animal"
+    },
+    {
+      "attr": "holding",
+      "value": false
+    },
+    {
+      "attr": "action",
+      "value": "sitting"
+    },
+    {
+      "attr": "accessories",
+      "value": "hat"
+    }
+  ],
+  "solutionId": "fixture-001-00",
+  "solutionLabel": "animal purple (scarf, hat)",
+  "solutionBBox": {
+    "x": 0.017553321146455032,
+    "y": 0.01313798178264127,
+    "w": 0.061197174358809635,
+    "h": 0.13826028281064398
+  },
+  "narrowing": [
+    8,
+    6,
+    3,
+    1
+  ],
+  "decoyHistogram": [
+    7,
+    14,
+    5,
+    5,
+    1
+  ],
+  "inventory": {
+    "sceneId": "fixture-001",
+    "theme": "fixture",
+    "image": {
+      "path": "C:\\Xavier\\slushy\\tools\\.work\\scenes\\fixture-001.png",
+      "width": 1920,
+      "height": 1080
+    },
+    "objects": [
+      {
+        "id": "fixture-001-00",
+        "label": "animal purple (scarf, hat)",
+        "kind": "animal",
+        "color": "purple",
+        "pattern": "checkered",
+        "accessories": [
+          "scarf",
+          "hat"
+        ],
+        "action": "sitting",
+        "holding": false,
+        "size": "large",
+        "bbox": {
+          "x": 0.017553321146455032,
+          "y": 0.01313798178264127,
+          "w": 0.061197174358809635,
+          "h": 0.13826028281064398
+        },
+        "zoneX": "left",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-01",
+        "label": "vehicle white (bag, crown)",
+        "kind": "vehicle",
+        "color": "white",
+        "pattern": "plain",
+        "accessories": [
+          "bag",
+          "crown"
+        ],
+        "action": "running",
+        "holding": true,
+        "size": "large",
+        "bbox": {
+          "x": 0.13965068674743686,
+          "y": 0.0036940229713087916,
+          "w": 0.06849662554357122,
+          "h": 0.15475163548732757
+        },
+        "zoneX": "left",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-02",
+        "label": "animal brown (bag)",
+        "kind": "animal",
+        "color": "brown",
+        "pattern": "plain",
+        "accessories": [
+          "bag"
+        ],
+        "action": "sitting",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.2898879475847916,
+          "y": 0.07819508278981745,
+          "w": 0.03830202000525368,
+          "h": 0.08653419334520261
+        },
+        "zoneX": "left",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-03",
+        "label": "vehicle red (bag)",
+        "kind": "vehicle",
+        "color": "red",
+        "pattern": "floral",
+        "accessories": [
+          "bag"
+        ],
+        "action": "jumping",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.40380888091058453,
+          "y": 0.03231772512125341,
+          "w": 0.055158997550061706,
+          "h": 0.12461847594643563
+        },
+        "zoneX": "center",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-04",
+        "label": "animal orange (bag)",
+        "kind": "animal",
+        "color": "orange",
+        "pattern": "plain",
+        "accessories": [
+          "bag"
+        ],
+        "action": "standing",
+        "holding": false,
+        "size": "large",
+        "bbox": {
+          "x": 0.5328467823550412,
+          "y": 0.02117660878185648,
+          "w": 0.06982806398587493,
+          "h": 0.15775970011623586
+        },
+        "zoneX": "center",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-05",
+        "label": "object white (hat)",
+        "kind": "object",
+        "color": "white",
+        "pattern": "plain",
+        "accessories": [
+          "hat"
+        ],
+        "action": "running",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.6584338978576116,
+          "y": 0.044127869909950025,
+          "w": 0.04196146205229723,
+          "h": 0.09480182167370849
+        },
+        "zoneX": "right",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-06",
+        "label": "plant green (glasses)",
+        "kind": "plant",
+        "color": "green",
+        "pattern": "checkered",
+        "accessories": [
+          "glasses"
+        ],
+        "action": "sleeping",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.7787247636607392,
+          "y": 0.07401838969755957,
+          "w": 0.05970813206040948,
+          "h": 0.1348961502105549
+        },
+        "zoneX": "right",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-07",
+        "label": "person orange (scarf, crown)",
+        "kind": "person",
+        "color": "orange",
+        "pattern": "floral",
+        "accessories": [
+          "scarf",
+          "crown"
+        ],
+        "action": "jumping",
+        "holding": false,
+        "size": "large",
+        "bbox": {
+          "x": 0.8876193529976237,
+          "y": 0.00268388329825067,
+          "w": 0.07446934165187868,
+          "h": 0.168245549657948
+        },
+        "zoneX": "right",
+        "zoneY": "top",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-08",
+        "label": "object pink (crown, bag)",
+        "kind": "object",
+        "color": "pink",
+        "pattern": "floral",
+        "accessories": [
+          "crown",
+          "bag"
+        ],
+        "action": "sitting",
+        "holding": true,
+        "size": "large",
+        "bbox": {
+          "x": 0.031025177300637048,
+          "y": 0.2745609623969791,
+          "w": 0.06365596616376563,
+          "h": 0.14381533096258164
+        },
+        "zoneX": "left",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-09",
+        "label": "object purple (hat)",
+        "kind": "object",
+        "color": "purple",
+        "pattern": "plain",
+        "accessories": [
+          "hat"
+        ],
+        "action": "sleeping",
+        "holding": false,
+        "size": "large",
+        "bbox": {
+          "x": 0.16649749834788663,
+          "y": 0.3037090865357606,
+          "w": 0.06646602301485047,
+          "h": 0.1501639779224399
+        },
+        "zoneX": "left",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-10",
+        "label": "vehicle orange (hat)",
+        "kind": "vehicle",
+        "color": "orange",
+        "pattern": "checkered",
+        "accessories": [
+          "hat"
+        ],
+        "action": "sitting",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.2953793218156265,
+          "y": 0.3149403419136901,
+          "w": 0.051094168763629655,
+          "h": 0.11543497387338558
+        },
+        "zoneX": "left",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-11",
+        "label": "plant white",
+        "kind": "plant",
+        "color": "white",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "running",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.4162749876428459,
+          "y": 0.3470899842400119,
+          "w": 0.03745398442958342,
+          "h": 0.08461826111868853
+        },
+        "zoneX": "center",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-12",
+        "label": "animal purple",
+        "kind": "animal",
+        "color": "purple",
+        "pattern": "floral",
+        "accessories": [],
+        "action": "sleeping",
+        "holding": true,
+        "size": "small",
+        "bbox": {
+          "x": 0.5397767853464116,
+          "y": 0.2951895710196749,
+          "w": 0.037897539161005356,
+          "h": 0.0856203662526418
+        },
+        "zoneX": "center",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-13",
+        "label": "vehicle black",
+        "kind": "vehicle",
+        "color": "black",
+        "pattern": "dotted",
+        "accessories": [],
+        "action": "sleeping",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.664769252842532,
+          "y": 0.34551098273952824,
+          "w": 0.04457386967890753,
+          "h": 0.1007039277930874
+        },
+        "zoneX": "right",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-14",
+        "label": "person white",
+        "kind": "person",
+        "color": "white",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "running",
+        "holding": true,
+        "size": "large",
+        "bbox": {
+          "x": 0.7783613124674174,
+          "y": 0.3030282996969635,
+          "w": 0.06360446279719578,
+          "h": 0.14369897150477562
+        },
+        "zoneX": "right",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-15",
+        "label": "object blue",
+        "kind": "object",
+        "color": "blue",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "jumping",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.909653686841343,
+          "y": 0.31374148203564295,
+          "w": 0.04205473759666889,
+          "h": 0.09501255531099284
+        },
+        "zoneX": "right",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-16",
+        "label": "plant pink (bag, hat)",
+        "kind": "plant",
+        "color": "pink",
+        "pattern": "plain",
+        "accessories": [
+          "bag",
+          "hat"
+        ],
+        "action": "sitting",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.045495210164414664,
+          "y": 0.5558015253032911,
+          "w": 0.054737907401225035,
+          "h": 0.12366712412869363
+        },
+        "zoneX": "left",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-17",
+        "label": "animal pink (scarf)",
+        "kind": "animal",
+        "color": "pink",
+        "pattern": "plain",
+        "accessories": [
+          "scarf"
+        ],
+        "action": "jumping",
+        "holding": true,
+        "size": "medium",
+        "bbox": {
+          "x": 0.14714611272757133,
+          "y": 0.5586587514277955,
+          "w": 0.058775716431270275,
+          "h": 0.1327895815669441
+        },
+        "zoneX": "left",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-18",
+        "label": "animal black",
+        "kind": "animal",
+        "color": "black",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "sleeping",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.28107693949048157,
+          "y": 0.5762063632527031,
+          "w": 0.03845040936568994,
+          "h": 0.08686944338174396
+        },
+        "zoneX": "left",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-19",
+        "label": "plant black (glasses)",
+        "kind": "plant",
+        "color": "black",
+        "pattern": "plain",
+        "accessories": [
+          "glasses"
+        ],
+        "action": "sleeping",
+        "holding": true,
+        "size": "medium",
+        "bbox": {
+          "x": 0.4166195422619554,
+          "y": 0.5171433541052727,
+          "w": 0.059401728723175284,
+          "h": 0.13420390563384044
+        },
+        "zoneX": "center",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-20",
+        "label": "vehicle black",
+        "kind": "vehicle",
+        "color": "black",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "standing",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.5277234113152649,
+          "y": 0.5506068269945735,
+          "w": 0.04004689211609003,
+          "h": 0.090476311817833
+        },
+        "zoneX": "center",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-21",
+        "label": "vehicle purple",
+        "kind": "vehicle",
+        "color": "purple",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "standing",
+        "holding": true,
+        "size": "small",
+        "bbox": {
+          "x": 0.6768041312400557,
+          "y": 0.5989902374333252,
+          "w": 0.03517107987256518,
+          "h": 0.07946058786023968
+        },
+        "zoneX": "right",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-22",
+        "label": "person grey",
+        "kind": "person",
+        "color": "grey",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "sleeping",
+        "holding": true,
+        "size": "large",
+        "bbox": {
+          "x": 0.7913681654907034,
+          "y": 0.5512479399901344,
+          "w": 0.0619439583212239,
+          "h": 0.13994746139239478
+        },
+        "zoneX": "right",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-23",
+        "label": "plant green",
+        "kind": "plant",
+        "color": "green",
+        "pattern": "floral",
+        "accessories": [],
+        "action": "standing",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.9234580223773373,
+          "y": 0.5819678408947193,
+          "w": 0.03659312529410064,
+          "h": 0.08267335714593138
+        },
+        "zoneX": "right",
+        "zoneY": "middle",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-24",
+        "label": "person white",
+        "kind": "person",
+        "color": "white",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "jumping",
+        "holding": true,
+        "size": "medium",
+        "bbox": {
+          "x": 0.027924596601662445,
+          "y": 0.8147269799549001,
+          "w": 0.047580561960949695,
+          "h": 0.10749682517103454
+        },
+        "zoneX": "left",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-25",
+        "label": "animal yellow (hat)",
+        "kind": "animal",
+        "color": "yellow",
+        "pattern": "plain",
+        "accessories": [
+          "hat"
+        ],
+        "action": "sleeping",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.16910260970660324,
+          "y": 0.837337667992553,
+          "w": 0.03613776375507882,
+          "h": 0.08164457737258546
+        },
+        "zoneX": "left",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-26",
+        "label": "person green (glasses)",
+        "kind": "person",
+        "color": "green",
+        "pattern": "plain",
+        "accessories": [
+          "glasses"
+        ],
+        "action": "sleeping",
+        "holding": false,
+        "size": "small",
+        "bbox": {
+          "x": 0.29682314487222666,
+          "y": 0.8140349158210722,
+          "w": 0.037373513495520094,
+          "h": 0.08443645641580466
+        },
+        "zoneX": "left",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-27",
+        "label": "object grey (scarf)",
+        "kind": "object",
+        "color": "grey",
+        "pattern": "plain",
+        "accessories": [
+          "scarf"
+        ],
+        "action": "jumping",
+        "holding": true,
+        "size": "large",
+        "bbox": {
+          "x": 0.41028313114223464,
+          "y": 0.7874188119705461,
+          "w": 0.06975085018953564,
+          "h": 0.15758525413191382
+        },
+        "zoneX": "center",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-28",
+        "label": "vehicle orange (scarf)",
+        "kind": "vehicle",
+        "color": "orange",
+        "pattern": "plain",
+        "accessories": [
+          "scarf"
+        ],
+        "action": "running",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.5245865586081232,
+          "y": 0.80524788862459,
+          "w": 0.05621223000197484,
+          "h": 0.12699800111557302
+        },
+        "zoneX": "center",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-29",
+        "label": "object brown (crown, scarf)",
+        "kind": "object",
+        "color": "brown",
+        "pattern": "striped",
+        "accessories": [
+          "crown",
+          "scarf"
+        ],
+        "action": "sleeping",
+        "holding": false,
+        "size": "medium",
+        "bbox": {
+          "x": 0.651697769228517,
+          "y": 0.7868914952834932,
+          "w": 0.05445101317703971,
+          "h": 0.12301895569627519
+        },
+        "zoneX": "right",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-30",
+        "label": "object yellow",
+        "kind": "object",
+        "color": "yellow",
+        "pattern": "plain",
+        "accessories": [],
+        "action": "sitting",
+        "holding": false,
+        "size": "large",
+        "bbox": {
+          "x": 0.7819016361670403,
+          "y": 0.7862642352158858,
+          "w": 0.07583795525094905,
+          "h": 0.1713376026039961
+        },
+        "zoneX": "right",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      },
+      {
+        "id": "fixture-001-31",
+        "label": "animal green (glasses)",
+        "kind": "animal",
+        "color": "green",
+        "pattern": "plain",
+        "accessories": [
+          "glasses"
+        ],
+        "action": "sitting",
+        "holding": false,
+        "size": "large",
+        "bbox": {
+          "x": 0.8968390975640591,
+          "y": 0.7852707058959302,
+          "w": 0.06487167032723595,
+          "h": 0.14656192185042172
+        },
+        "zoneX": "right",
+        "zoneY": "bottom",
+        "confident": [
+          "kind",
+          "color",
+          "size",
+          "pattern",
+          "accessories",
+          "action",
+          "holding",
+          "zoneX",
+          "zoneY"
+        ]
+      }
+    ]
+  }
+}

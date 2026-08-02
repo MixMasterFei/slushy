@@ -1,0 +1,52 @@
+{
+  "name": "slushy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "tsx tools/prepare-build.ts",
+    "dev": "next dev",
+    "prebuild": "tsx tools/prepare-build.ts",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "spike": "tsx tools/spike.ts",
+    "fixture": "tsx tools/make-fixture.ts",
+    "scene": "tsx tools/1-generate-scene.ts",
+    "inventory": "tsx tools/2-inventory.ts",
+    "solve": "tsx tools/3-solve-clues.ts",
+    "verify": "tsx tools/4-verify.ts",
+    "publish": "tsx tools/5-publish.ts",
+    "batch": "tsx tools/run-batch.ts"
+  },
+  "dependencies": {
+    "next": "16.2.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@google/genai": "^2.15.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.12",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.1",
+    "typescript": "^5",
+    "vitest": "^4.1.10",
+    "zod": "^4.4.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true,
+    "sharp@0.35.3": true,
+    "protobufjs@7.6.5": true,
+    "unrs-resolver@1.12.2": true
+  }
+}

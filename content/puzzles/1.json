@@ -1,0 +1,26 @@
+{
+  "number": 1,
+  "date": "2026-08-01",
+  "image": {
+    "src": "/img/f7bc6a0445cb.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "clues": {
+    "fr": [
+      "Un animal",
+      "Ne tient rien",
+      "En position assise",
+      "Porte un chapeau"
+    ],
+    "en": [
+      "An animal",
+      "Not holding anything",
+      "Sitting",
+      "Wearing a hat"
+    ]
+  },
+  "solution": {
+    "token": "Lg8SFulJKeRJi-1ZRkPChmVn2fZQY1RduMb84YlbB7PU-bLRG6vFPZeQ44c5ta8FOZ1uN7Nu6dOFBy8nfLMm81o9ocY"
+  }
+}
