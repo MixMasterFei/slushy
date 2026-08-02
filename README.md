@@ -110,6 +110,29 @@ npm run publish
 
 ---
 
+## Déploiement
+
+`vercel.json` fixe la configuration dans le dépôt plutôt que de la laisser à la détection
+automatique. Trois choix y sont encodés :
+
+**`framework: null`** — le projet ne contient aucune fonction serverless. Laisser Vercel
+exécuter son builder Next.js le fait chercher dans `.next`, où un export statique n'écrit rien
+de servable : le déploiement existe alors mais renvoie `NOT_FOUND` sur toutes les routes. En
+désactivant le préréglage, Vercel se contente de servir `out/`.
+
+**Cache** — `/puzzles/` en `must-revalidate` : le JSON change chaque jour, et un CDN qui le
+garderait servirait le puzzle de la veille. `/img/` en `immutable` : les noms sont hachés.
+
+**Reconstruction quotidienne** — indispensable, car `prepare-build.ts` ne recopie que les
+puzzles jouables *à l'instant du build* : sans elle le jeu se fige au lendemain de la mise en
+ligne. Vercel Cron ne convient pas (il invoque une fonction serverless, qu'un export statique
+n'a pas), d'où une action GitHub planifiée qui déclenche un Deploy Hook. À configurer une fois :
+
+1. Vercel → projet → *Settings* → *Git* → *Deploy Hooks* → créer un hook sur `main`
+2. GitHub → *Settings* → *Secrets and variables* → *Actions* → secret `VERCEL_DEPLOY_HOOK`
+
+L'URL du hook est un secret : quiconque la détient peut déclencher des déploiements.
+
 ## Points de vigilance
 
 **Anti-spoiler.** `content/puzzles/` contient tout le stock d'avance ; sur un site statique, un
