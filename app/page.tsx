@@ -99,7 +99,12 @@ export default function Home() {
   const left = attemptsLeft(state);
 
   return (
-    <main className="mx-auto flex h-dvh w-full max-w-6xl flex-col gap-3 p-3 sm:p-4">
+    // `min-h-dvh` plutôt que `h-dvh` : sur un écran court, une hauteur stricte
+    // faisait absorber tout l'espace vertical par le panneau d'indices et la
+    // scène tombait à zéro — invisible, et injouable. Ici la page défile
+    // plutôt que d'écraser l'image. Sur grand écran, `lg:h-dvh` rétablit la
+    // mise en page fixe, tenant en un seul écran.
+    <main className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-3 p-3 sm:p-4 lg:h-dvh">
       <header className="flex shrink-0 items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-black tracking-tight sm:text-2xl">
@@ -139,7 +144,10 @@ export default function Home() {
       {phase.kind === "ready" && (
         <>
           <div className="flex min-h-0 flex-1 flex-col gap-3 lg:flex-row">
-            <div className="relative min-h-0 flex-1">
+            {/* Plancher de hauteur : la scène est le jeu, elle ne doit jamais
+                être comprimée à néant par le panneau d'indices. Sur grand écran
+                `lg:min-h-0` rend la main au partage flex habituel. */}
+            <div className="relative min-h-[45vh] flex-1 lg:min-h-0">
               <SceneViewer
                 src={phase.puzzle.image.src}
                 imageWidth={phase.puzzle.image.width}

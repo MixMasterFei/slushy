@@ -4,17 +4,28 @@
  * Visionneuse de scène : zoom, déplacement, et conversion d'un clic en
  * coordonnées normalisées de l'image.
  *
- * Toute la difficulté tient dans une seule exigence : le clic doit désigner un
- * point de l'IMAGE, pas de l'écran. L'utilisateur zoome, fait glisser, tourne son
- * téléphone — la position visée doit rester la même. On gère donc la transformation
- * à la main plutôt que de laisser le navigateur ajuster l'image, ce qui permet de
- * l'inverser exactement au moment du clic.
+ * ---------------------------------------------------------------------------
+ * Principe : c'est le NAVIGATEUR qui dimensionne, pas nous.
+ * ---------------------------------------------------------------------------
+ * Une version antérieure mesurait le conteneur, stockait la taille dans un état
+ * React alimenté par ResizeObserver, et en dérivait une échelle. Fragile par
+ * construction : si le callback n'arrivait jamais (onglet qui ne composite pas)
+ * ou arrivait avec une valeur périmée, l'échelle restait fausse — jusqu'à zéro,
+ * c'est-à-dire une scène invisible.
  *
- * Distinguer un clic d'un glissement compte tout autant : sur mobile, un doigt qui
- * se déplace de trois pixels pendant un pan ne doit pas brûler un essai.
+ * Ici la boîte de l'image porte un `aspect-ratio` et des contraintes `max-*`, ce
+ * qui laisse le moteur de rendu calculer lui-même la plus grande boîte au bon
+ * ratio tenant dans le cadre. Aucun état de taille, aucune échelle calculée à la
+ * main, rien à resynchroniser au redimensionnement.
+ *
+ * Conséquence directe : les coordonnées d'un clic se lisent sur la géométrie
+ * réelle de cette boîte au moment du clic (`getBoundingClientRect`). Elles sont
+ * donc justes par construction, quels que soient le zoom, le déplacement, la
+ * taille de fenêtre ou l'orientation. Et comme les marqueurs vivent DANS cette
+ * boîte et sont positionnés en pourcentages, ils suivent sans calcul.
  */
 
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { BBox } from "@/lib/types";
 import type { Attempt, Point } from "@/lib/game-state";
 
@@ -22,12 +33,6 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 8;
 /** Au-delà de ce déplacement (px), le geste est un pan et non un clic. */
 const DRAG_THRESHOLD = 6;
-
-interface View {
-  zoom: number;
-  tx: number;
-  ty: number;
-}
 
 interface Props {
   src: string;
@@ -43,91 +48,59 @@ interface Props {
 export function SceneViewer({
   src, imageWidth, imageHeight, attempts, reveal, disabled, onPick,
 }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState({ w: 0, h: 0 });
-  const [view, setView] = useState<View>({ zoom: 1, tx: 0, ty: 0 });
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
-  // Gestes en cours. Volontairement dans des refs : ces valeurs changent à chaque
-  // pixel parcouru et n'ont aucune raison de déclencher un rendu.
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+
+  // Gestes en cours : dans des refs, car ces valeurs changent à chaque pixel
+  // parcouru et n'ont aucune raison de déclencher un rendu.
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const gesture = useRef({ dragging: false, moved: 0, lastX: 0, lastY: 0, pinchDist: 0 });
 
-  /** Échelle « contain » pour un conteneur donné : l'image entière est visible à zoom 1. */
-  const fitScale = useCallback(
-    (w: number, h: number) => (w && imageWidth ? Math.min(w / imageWidth, h / imageHeight) : 0),
-    [imageWidth, imageHeight],
-  );
-
-  const baseScale = fitScale(size.w, size.h);
-  const scale = baseScale * view.zoom;
-  const shownW = imageWidth * scale;
-  const shownH = imageHeight * scale;
-
   /**
-   * Empêche l'image de dériver hors du cadre ; la recentre si elle y tient
-   * entièrement. Prend les dimensions du conteneur en argument plutôt que de les
-   * lire dans l'état : le ResizeObserver doit pouvoir recadrer avec les NOUVELLES
-   * dimensions, avant même que l'état ait été mis à jour.
+   * Empêche de faire glisser la scène hors du cadre. Les dimensions au repos se
+   * lisent sur le DOM (`offsetWidth` ignore la transformation d'un ancêtre), donc
+   * toujours à jour sans qu'on ait à les suivre.
    */
-  const clamp = useCallback((v: View, w: number, h: number): View => {
-    const s = fitScale(w, h) * v.zoom;
-    const dw = imageWidth * s;
-    const dh = imageHeight * s;
-    const tx = dw <= w ? (w - dw) / 2 : Math.min(0, Math.max(w - dw, v.tx));
-    const ty = dh <= h ? (h - dh) / 2 : Math.min(0, Math.max(h - dh, v.ty));
-    return { zoom: v.zoom, tx, ty };
-  }, [fitScale, imageWidth, imageHeight]);
-
-  // Premier calibrage et redimensionnements (rotation du téléphone, barre
-  // d'adresse qui se replie…). Le recadrage se fait dans la réponse à l'événement
-  // externe plutôt que dans un effet qui observerait `size`, ce qui déclencherait
-  // un rendu en cascade à chaque pixel parcouru.
-  useLayoutEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const apply = (width: number, height: number) => {
-      setSize({ w: width, h: height });
-      setView((v) => clamp(v, width, height));
+  const clampPan = useCallback((next: { x: number; y: number }, z: number) => {
+    const viewport = viewportRef.current;
+    const box = boxRef.current;
+    if (!viewport || !box) return next;
+    const maxX = Math.max(0, (box.offsetWidth * z - viewport.clientWidth) / 2);
+    const maxY = Math.max(0, (box.offsetHeight * z - viewport.clientHeight) / 2);
+    return {
+      x: Math.min(maxX, Math.max(-maxX, next.x)),
+      y: Math.min(maxY, Math.max(-maxY, next.y)),
     };
-
-    // Mesure initiale synchrone. Indispensable : ResizeObserver ne livre son
-    // premier callback qu'au prochain cycle de rendu, et un onglet qui ne
-    // composite pas (arrière-plan, prévisualisation masquée) peut ne jamais
-    // l'émettre. Sans cette mesure, l'échelle resterait à 0 et la scène
-    // invisible. C'est précisément l'usage de useLayoutEffect : lire le DOM
-    // une fois la mise en page faite.
-    apply(el.clientWidth, el.clientHeight);
-
-    const observer = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      apply(width, height);
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [clamp]);
+  }, []);
 
   /** Zoome autour d'un point de l'écran, qui reste immobile sous le doigt. */
   const zoomAt = useCallback((clientX: number, clientY: number, factor: number) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const px = clientX - rect.left;
-    const py = clientY - rect.top;
-    setView((v) => {
-      const zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, v.zoom * factor));
-      if (zoom === v.zoom) return v;
-      const s = baseScale * v.zoom;
-      const s2 = baseScale * zoom;
-      // Le point image sous le curseur doit rester sous le curseur.
-      const ix = (px - v.tx) / s;
-      const iy = (py - v.ty) / s;
-      return clamp({ zoom, tx: px - ix * s2, ty: py - iy * s2 }, rect.width, rect.height);
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const rect = viewport.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    setZoom((z) => {
+      const next = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z * factor));
+      if (next === z) return z;
+      setPan((p) => {
+        // Le point sous le curseur doit rester sous le curseur :
+        //   écran = centre + pan + z · offset  ⇒  offset = (écran − centre − pan) / z
+        const ratio = next / z;
+        return clampPan(
+          { x: clientX - cx - ratio * (clientX - cx - p.x), y: clientY - cy - ratio * (clientY - cy - p.y) },
+          next,
+        );
+      });
+      return next;
     });
-  }, [baseScale, clamp]);
+  }, [clampPan]);
 
   const onWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
     zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15);
   }, [zoomAt]);
 
@@ -135,9 +108,8 @@ export function SceneViewer({
     try {
       // Lève une InvalidPointerId si le pointeur n'est plus actif — ce qui arrive
       // pour de bon lors d'un toucher interrompu par un appel ou un geste système.
-      // La capture est un confort (le glissement survit à la sortie du cadre),
-      // pas une nécessité : son échec ne doit pas casser la partie.
-      (e.target as Element).setPointerCapture?.(e.pointerId);
+      // La capture est un confort, pas une nécessité : son échec ne doit rien casser.
+      (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
     } catch {
       /* on continue sans capture */
     }
@@ -160,9 +132,7 @@ export function SceneViewer({
       const [a, b] = [...pointers.current.values()];
       const dist = Math.hypot(a.x - b.x, a.y - b.y);
       const previous = gesture.current.pinchDist;
-      if (previous > 0 && dist > 0) {
-        zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, dist / previous);
-      }
+      if (previous > 0 && dist > 0) zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, dist / previous);
       gesture.current.pinchDist = dist;
       return;
     }
@@ -173,10 +143,8 @@ export function SceneViewer({
     gesture.current.moved += Math.abs(dx) + Math.abs(dy);
     gesture.current.lastX = e.clientX;
     gesture.current.lastY = e.clientY;
-    const el = containerRef.current;
-    if (!el) return;
-    setView((v) => clamp({ ...v, tx: v.tx + dx, ty: v.ty + dy }, el.clientWidth, el.clientHeight));
-  }, [clamp, zoomAt]);
+    setPan((p) => clampPan({ x: p.x + dx, y: p.y + dy }, zoom));
+  }, [clampPan, zoom, zoomAt]);
 
   const onPointerUp = useCallback((e: React.PointerEvent) => {
     const wasDragging = gesture.current.dragging;
@@ -188,77 +156,100 @@ export function SceneViewer({
     // Seul un geste unique et quasi immobile compte comme une tentative.
     if (!wasDragging || moved > DRAG_THRESHOLD || disabled) return;
 
-    const el = containerRef.current;
-    if (!el || !scale) return;
-    const rect = el.getBoundingClientRect();
-    const ix = (e.clientX - rect.left - view.tx) / scale / imageWidth;
-    const iy = (e.clientY - rect.top - view.ty) / scale / imageHeight;
-    if (ix < 0 || ix > 1 || iy < 0 || iy > 1) return; // clic dans la marge, hors image
-    onPick({ x: ix, y: iy });
-  }, [disabled, imageHeight, imageWidth, onPick, scale, view.tx, view.ty]);
+    const box = boxRef.current;
+    if (!box) return;
+    // La géométrie réelle de l'image à cet instant précis : zoom, déplacement et
+    // taille de fenêtre y sont déjà intégrés. Rien à recalculer.
+    const rect = box.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    if (x < 0 || x > 1 || y < 0 || y > 1) return; // clic dans la marge, hors image
+    onPick({ x, y });
+  }, [disabled, onPick]);
 
-  /** Coordonnées image normalisées → position en pixels dans le conteneur. */
-  const toScreen = (nx: number, ny: number) => ({
-    left: view.tx + nx * shownW,
-    top: view.ty + ny * shownH,
-  });
+  const percent = (v: number) => `${v * 100}%`;
 
   return (
     <div
-      ref={containerRef}
+      ref={viewportRef}
       onWheel={onWheel}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
-      className={`relative h-full w-full overflow-hidden rounded-xl bg-neutral-200 dark:bg-neutral-800
+      className={`relative flex h-full w-full items-center justify-center overflow-hidden
+        rounded-xl bg-neutral-200 dark:bg-neutral-800
         ${disabled ? "cursor-default" : "cursor-crosshair"} touch-none select-none`}
-      style={{ contain: "paint" }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt=""
-        draggable={false}
-        width={imageWidth}
-        height={imageHeight}
-        className="absolute origin-top-left will-change-transform"
-        style={{
-          transform: `translate3d(${view.tx}px, ${view.ty}px, 0) scale(${scale})`,
-          transformOrigin: "0 0",
-          imageRendering: view.zoom > 3 ? "pixelated" : "auto",
-        }}
-      />
+      <div
+        className="flex h-full w-full items-center justify-center will-change-transform"
+        style={{ transform: `translate3d(${pan.x}px, ${pan.y}px, 0) scale(${zoom})` }}
+      >
+        {/*
+          `h-full` donne une hauteur DÉFINIE dont `aspect-ratio` déduit la largeur ;
+          `max-w-full` reprend la main quand le cadre est plus étroit, et le ratio
+          recalcule alors la hauteur. C'est exactement un « contain », mais résolu
+          par le moteur de rendu.
 
-      {/* Croix persistantes : le joueur doit voir où il a déjà cherché. */}
-      {attempts.filter((a) => !a.correct).map((a, i) => {
-        const { left, top } = toScreen(a.point.x, a.point.y);
-        return (
-          <span
-            key={i}
-            aria-hidden
-            className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-xl font-black
-                       text-red-600 drop-shadow-[0_0_3px_rgba(255,255,255,0.95)]"
-            style={{ left, top }}
-          >
-            ✕
-          </span>
-        );
-      })}
+          Le point de départ défini est indispensable : avec seulement `max-h-full
+          max-w-full`, la boîte se dimensionnait sur son contenu et l'image sur la
+          boîte — une dépendance circulaire qui résout à ZÉRO, donc une scène
+          invisible et des clics ignorés.
 
-      {reveal && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute animate-pulse rounded-lg border-4 border-emerald-400
-                     shadow-[0_0_0_9999px_rgba(0,0,0,0.45)]"
-          style={{
-            left: view.tx + reveal.x * shownW,
-            top: view.ty + reveal.y * shownH,
-            width: reveal.w * shownW,
-            height: reveal.h * shownH,
-          }}
-        />
-      )}
+          Comme le ratio est le bon, il n'y a aucune bande vide : la boîte EST
+          l'image. D'où des coordonnées exactes et des marqueurs positionnables en
+          simples pourcentages.
+        */}
+        <div
+          ref={boxRef}
+          className="relative h-full max-h-full max-w-full"
+          style={{ aspectRatio: `${imageWidth} / ${imageHeight}` }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt=""
+            draggable={false}
+            className="block h-full w-full"
+            style={{ imageRendering: zoom > 3 ? "pixelated" : "auto" }}
+          />
+
+          {/* Croix persistantes : le joueur doit voir où il a déjà cherché. */}
+          {attempts.filter((a) => !a.correct).map((a, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 font-black
+                         text-red-600 drop-shadow-[0_0_3px_rgba(255,255,255,0.95)]"
+              style={{
+                left: percent(a.point.x),
+                top: percent(a.point.y),
+                // Contre-échelle : le marqueur garde la même taille à l'écran
+                // quel que soit le zoom, au lieu de devenir énorme.
+                fontSize: `${1.25 / zoom}rem`,
+              }}
+            >
+              ✕
+            </span>
+          ))}
+
+          {reveal && (
+            <span
+              aria-hidden
+              className="pointer-events-none absolute animate-pulse rounded-lg border-emerald-400
+                         shadow-[0_0_0_9999px_rgba(0,0,0,0.45)]"
+              style={{
+                left: percent(reveal.x),
+                top: percent(reveal.y),
+                width: percent(reveal.w),
+                height: percent(reveal.h),
+                borderWidth: `${4 / zoom}px`,
+              }}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
