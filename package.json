@@ -2,6 +2,9 @@
   "name": "slushy",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.11"
+  },
   "scripts": {
     "predev": "tsx tools/prepare-build.ts",
     "dev": "next dev",

@@ -1,0 +1,49 @@
+# Reconstruction quotidienne — c'est elle qui rend la protection anti-spoiler réelle.
+#
+# tools/prepare-build.ts ne recopie vers public/puzzles/ que les puzzles jouables
+# au moment du build. Sans reconstruction quotidienne, le déploiement resterait figé
+# sur la date de sa mise en ligne et le jeu cesserait d'avancer au bout d'un jour.
+#
+# Pourquoi pas Vercel Cron : il invoque une fonction serverless, et un export
+# statique n'en contient aucune. On passe donc par un Deploy Hook, déclenché ici.
+#
+# Mise en place, une seule fois :
+#   1. Vercel → projet → Settings → Git → Deploy Hooks → créer un hook sur `main`
+#   2. GitHub → repo → Settings → Secrets and variables → Actions → New secret
+#      Nom : VERCEL_DEPLOY_HOOK        Valeur : l'URL du hook
+#
+# L'URL du hook est un secret : qui la possède peut déclencher des déploiements.
+# Elle ne doit jamais être écrite en clair dans ce fichier.
+
+name: Reconstruction quotidienne
+
+on:
+  schedule:
+    # 00:10 UTC. prepare-build publie jusqu'à J+1 en date UTC, ce qui couvre
+    # UTC+14 — le fuseau le plus en avance — sans jamais exposer plus loin.
+    - cron: "10 0 * * *"
+  workflow_dispatch: # déclenchement manuel, pour tester sans attendre minuit
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier que le hook est configuré
+        run: |
+          if [ -z "${{ secrets.VERCEL_DEPLOY_HOOK }}" ]; then
+            echo "::error::Secret VERCEL_DEPLOY_HOOK absent — voir l'en-tête de ce fichier."
+            exit 1
+          fi
+
+      - name: Déclencher le déploiement
+        run: |
+          code=$(curl -X POST -s -o response.txt -w "%{http_code}" \
+            "${{ secrets.VERCEL_DEPLOY_HOOK }}")
+          echo "HTTP $code"
+          cat response.txt
+          # Un hook qui échoue en silence laisserait le jeu se figer sans alerte :
+          # on veut que l'action passe au rouge.
+          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
+            echo "::error::Le Deploy Hook a répondu $code"
+            exit 1
+          fi
